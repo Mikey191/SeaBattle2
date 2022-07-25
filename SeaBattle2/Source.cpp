@@ -120,17 +120,32 @@ void fillFieldRand(char a[][size])
 {
 	char begin[2];
 	char end[2];
+	int x;
 
 	int startRow;
 	int startCol;
 	int endRow;
 	int endCol;
 
-	startRow = int(begin[1]) - 48;//в какой строке начало
-	startCol = int(begin[0]) - 65;//в каком столбце начало
-	endRow = int(end[1]) - 48;//в какой строке конец
-	endCol = int(end[0]) - 65;//в каком столбце конец
+	//по горизонтали
+	x = rand() % 10;
+	begin[1] = int(upLine[x]);
+	cout << begin[1]<<" - begin up line" << endl;
+	end[1] = int(upLine[x+3]);
+	cout << end[1]<<" - end up line" << endl;
 
+	//по вертикали
+	x = rand() % 10;
+	begin[0] = int(leftLine[x]);
+	cout << begin[0]<<" - begin left line" << endl;
+	end[0] = int(leftLine[x+2]);
+	cout << end[0]<<" - end left line" << endl;
+
+	startRow = begin[1];
+	startCol = begin[0];
+	endRow = end[1];
+	endCol = end[0];
+	
 	int direction;
 	direction = rand() % 1;
 	if (direction == leftRight) //два условия 1. корабль не должен быть длинее расстояния до левой границы 2. корабль не должен пересекать уже существующий
@@ -152,6 +167,21 @@ void fillFieldRand(char a[][size])
 	}
 }
 
+void randomFill(char a[10][10], char b[10][10])//заполняем поле
+{
+	for (size_t i = 4; i >= 1; i--)//длина коробля от 4 до 1
+	{
+		for (size_t j = 1; j <= 5 - i; j++)//кол-во кораблей от 1 до 4
+		{
+			if (fillFieldPlayerOne == 1)//если выбрали рандом вначале игры
+			{
+
+			}
+			
+		}
+	}
+}
+
 
 void game()
 {
@@ -163,8 +193,12 @@ void game()
 
 int main()
 {
-	startGame();
+
+	srand(time(NULL));
 	fillClearField(fieldSecondPlayerOne, fieldSecondPlayerTwo);
+	fillFieldRand(fieldSecondPlayerOne);
+	//startGame();
+	
 	//fillFieldHands(fieldFirstPlayerOne, fieldSecondPlayerOne);
 	//game();
 
