@@ -34,10 +34,10 @@ void startGame()//старт игры
 	cin >> fillFieldPlayerTwo;
 }
 
-void printField(const char a[][size])
+void printField(const char a[][size])//печать полей
 {
-	system("CLS");
-	cout << " " << upLine << endl;
+	//system("CLS");
+	cout << "  " << upLine << endl;
 	for (size_t i = 0; i < size; i++)
 	{
 		cout << i << " ";
@@ -49,7 +49,22 @@ void printField(const char a[][size])
 	cout << endl;
 }
 
-void rulesFill(char a[][size], char begin[2], char end[2])
+void fillClearField(char a[][size],char b[][size])
+{
+
+	for (size_t i = 0; i < size; i++)
+	{
+		for (size_t j = 0; j < size; j++)
+		{
+			a[i][j] = ' ';
+			b[i][j] = ' ';
+		}
+	}
+	printField(a);
+	printField(b);
+}
+
+void printShip(char a[][size], char begin[2], char end[2])
 {
 	int startRow;
 	int startCol;
@@ -61,7 +76,7 @@ void rulesFill(char a[][size], char begin[2], char end[2])
 	endRow = int(end[1]) - 48;//в какой строке конец
 	endCol = int(end[0]) - 65;//в каком столбце конец
 
-	if(startRow == endRow) //если номера строк у начала и конца одинаковые - по горизонтали
+	if (startRow == endRow) //если номера строк у начала и конца одинаковые - по горизонтали
 		for (size_t j = startCol; j <= endCol; j++)
 		{
 			a[startRow][j] = '*';
@@ -75,19 +90,66 @@ void rulesFill(char a[][size], char begin[2], char end[2])
 
 void fillFieldHands(char a[][size], char b[][size])
 {
-	for (size_t i = 0; i < size; i++)
+	for (size_t i = 4; i >= 1; i--)//длина коробля от 4 до 1
 	{
-		for (size_t j = 0; j < size; j++)
+		for (size_t j = 1; j <= 5 - i; j++)//кол-во кораблей от 1 до 4
 		{
-			a[i][j] = ' ';
-			b[i][j] = ' ';
+			printField(a);
+			char begin[3], end[3];
+			cout << "ship length: " << i << endl;
+			cout << "\tbegin: ";//начало коробля
+			cin >> begin;
+			if (i > 1)
+			{
+				cout << "\tend: ";//конец корабля
+				cin >> end;
+			}
+			else
+			{
+				end[0] = begin[0];
+				end[1] = begin[1];
+			}
+			printShip(a, begin, end);//запоминаем корабль
 		}
 	}
 }
 
+#define leftRight 1
+#define upDown 0
 void fillFieldRand(char a[][size])
 {
+	char begin[2];
+	char end[2];
 
+	int startRow;
+	int startCol;
+	int endRow;
+	int endCol;
+
+	startRow = int(begin[1]) - 48;//в какой строке начало
+	startCol = int(begin[0]) - 65;//в каком столбце начало
+	endRow = int(end[1]) - 48;//в какой строке конец
+	endCol = int(end[0]) - 65;//в каком столбце конец
+
+	int direction;
+	direction = rand() % 1;
+	if (direction == leftRight) //два условия 1. корабль не должен быть длинее расстояния до левой границы 2. корабль не должен пересекать уже существующий
+	{
+		if (startRow == endRow) //если номера строк у начала и конца одинаковые - по горизонтали
+			for (size_t j = startCol; j <= endCol; j++)
+			{
+				a[startRow][j] = '*';
+			}
+	}
+
+	if (direction == upDown)//два условия 1. корабль не должен быть длинее расстояния до нижней границы 2. корабль не должен пересекать уже существующий
+	{
+		if (startCol == endCol)					//по вертикали
+			for (size_t i = startRow; i <= endRow; i++)
+			{
+				a[i][startCol] = '*';
+			}
+	}
 }
 
 
@@ -102,6 +164,7 @@ void game()
 int main()
 {
 	startGame();
+	fillClearField(fieldSecondPlayerOne, fieldSecondPlayerTwo);
 	//fillFieldHands(fieldFirstPlayerOne, fieldSecondPlayerOne);
 	//game();
 
